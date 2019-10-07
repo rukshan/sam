@@ -6,14 +6,14 @@ Description: >
 
 Parameters:
   DatabaseUsername:
-    AllowedPattern: "[a-zA-Z0-9]+"
+    AllowedPattern: "root"
     ConstraintDescription: must be between 1 to 16 alphanumeric characters.
     Description: The database admin account user name, between 1 to 16 alphanumeric characters.
     MaxLength: '16'
     MinLength: '1'
     Type: String
   DatabasePassword:
-    AllowedPattern: "[a-zA-Z0-9]+"
+    AllowedPattern: "Persistent2019"
     ConstraintDescription: must be between 8 to 41 alphanumeric characters.
     Description: The database admin account password, between 8 to 41 alphanumeric characters.
     MaxLength: '41'
@@ -22,15 +22,15 @@ Parameters:
     Type: String
 
 Mappings:
-  '000000000000':
-    us-east-1:
+  '538804526516':
+    us-east-2:
       Subnets:
         - subnet-00000000
         - subnet-11111111
         - subnet-22222222
       SecurityGroups:
         - sg-00000000
-      InstanceType: db.r4.large
+      InstanceType: db.t2.small
       BackupRetentionPeriod: 7
 
 Metadata:
