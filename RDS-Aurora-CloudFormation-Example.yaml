@@ -27,7 +27,7 @@ Mappings:
         - subnet-0ce624ed4acaa5978
         - subnet-04eeaa092757f2cd5        
       SecurityGroups:
-        - aurora-db-security-group
+        - sg-0cb2aaa84d1d1ff71
       InstanceType: db.t2.medium
       BackupRetentionPeriod: 7
 
