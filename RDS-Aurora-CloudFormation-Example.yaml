@@ -19,6 +19,14 @@ Parameters:
     MinLength: '8'
     NoEcho: 'true'
     Type: String
+  DatabaseName:
+    AllowedPattern: "[a-zA-Z0-9-_]+"
+    ConstraintDescription: must be between 8 to 41 alphanumeric characters.
+    Description: The database admin account password, between 8 to 41 alphanumeric characters.
+    MaxLength: '41'
+    MinLength: '8'
+    NoEcho: 'true'
+    Type: String     
 
 Mappings:
   '538804526516':
@@ -39,11 +47,14 @@ Metadata:
         Parameters:
           - DatabaseUsername
           - DatabasePassword
+          - DatabaseName
     ParameterLabels:
       DatabaseUsername:
         default: Database Username
       DatabasePassword:
         default: Database Password
+      DatabaseName:
+        default: Database Name
         
 Resources:
   StackAlarmTopic:
@@ -61,6 +72,7 @@ Resources:
     Type: AWS::RDS::DBCluster
     Properties:
       Engine: aurora
+      DatabaseName: !Ref "DatabaseName"
       MasterUsername: !Ref "DatabaseUsername"
       MasterUserPassword: !Ref "DatabasePassword"
       BackupRetentionPeriod: !FindInMap [!Ref "AWS::AccountId", !Ref "AWS::Region", "BackupRetentionPeriod"]
