@@ -82,7 +82,7 @@ Resources:
       PreferredBackupWindow: 01:00-02:00
       PreferredMaintenanceWindow: mon:03:00-mon:04:00
       DBSubnetGroupName: !Ref "DatabaseSubnetGroup"
-      VpcSecurityGroupIds: !Ref ClusterControlPlaneSecurityGroup
+      VpcSecurityGroupIds: !Ref DBIBAuroraDBSecurityGroup
       Tags:
         - Key: Name
         - Value: AuroraDB 
