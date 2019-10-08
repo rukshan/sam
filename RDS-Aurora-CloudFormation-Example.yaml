@@ -37,8 +37,8 @@ Metadata:
       - Label:
           default: Database Configuration
         Parameters:
-          - root
-          - Persistent2019
+          - DatabaseUsername
+          - DatabasePassword
     ParameterLabels:
       DatabaseUsername:
         default: Database Username
