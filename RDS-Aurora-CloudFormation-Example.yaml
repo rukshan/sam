@@ -61,9 +61,15 @@ Metadata:
         
 Resources:
   DBIBAuroraDBSecurityGroup:
-    Type: "AWS::EC2::SecurityGroup::Id"
-    Description: The security group of the cluster control plane. 
-  
+    Type: AWS::RDS::DBSecurityGroup
+    Properties: 
+    DBSecurityGroupIngress: 
+    - CIDRIP:0.0.0.0/0
+    GroupDescription: Aurora DB SG for DBIB
+    Tags: 
+    - Key: Name 
+    - Value: DBIB DB Security group
+    
   DatabaseSubnetGroup:
     Type: AWS::RDS::DBSubnetGroup
     Properties:
