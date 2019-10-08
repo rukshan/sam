@@ -21,12 +21,11 @@ Parameters:
     Type: String
   DatabaseName:
     AllowedPattern: "[a-zA-Z0-9-_]+"
-    ConstraintDescription: must be between 8 to 41 alphanumeric characters.
-    Description: The database admin account password, between 8 to 41 alphanumeric characters.
-    MaxLength: '41'
-    MinLength: '8'
-    NoEcho: 'true'
-    Type: String     
+    ConstraintDescription: must be between 4 to 30 alphanumeric characters.
+    Description: The database admin account user name, between 1 to 16 alphanumeric characters.
+    MaxLength: '30'
+    MinLength: '4'
+    Type: String
 
 Mappings:
   '538804526516':
@@ -45,16 +44,17 @@ Metadata:
       - Label:
           default: Database Configuration
         Parameters:
-          - DatabaseUsername
-          - DatabasePassword
           - DatabaseName
+          - DatabaseUsername
+          - DatabasePassword          
     ParameterLabels:
+      DatabaseName:
+        default: Database Name
       DatabaseUsername:
         default: Database Username
       DatabasePassword:
         default: Database Password
-      DatabaseName:
-        default: Database Name
+      
         
 Resources:
   StackAlarmTopic:
