@@ -21,11 +21,11 @@ Parameters:
     Type: String
 
 Mappings:
-  '538804526516538804526516':
+  '538804526516':
     ap-southeast-1:
       Subnets:
         - subnet-0ce624ed4acaa5978
-        - subnet-0ce624ed4acaa5978        
+        - subnet-04eeaa092757f2cd5        
       SecurityGroups:
         - aurora-db-security-group
       InstanceType: db.t2.medium
