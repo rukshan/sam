@@ -25,7 +25,8 @@ Parameters:
     MaxLength: '30'
     MinLength: '4'
     Type: String
-  PrivateSubnet:  
+  Subnets:
+    Type: "List<AWS::EC2::Subnet::Id>"  
 
 #Mappings:
 #  '538804526516':
@@ -46,7 +47,8 @@ Metadata:
         Parameters:
           - DatabaseName
           - DatabaseUsername
-          - DatabasePassword          
+          - DatabasePassword
+          - Subnets
     ParameterLabels:
       DatabaseName:
         default: Database Name
@@ -54,13 +56,15 @@ Metadata:
         default: Database Username
       DatabasePassword:
         default: Database Password
+      Subnets:
+        default: subnet-0ce624ed4acaa5978,subnet-04eeaa092757f2cd5
         
 Resources:
   DatabaseSubnetGroup:
     Type: AWS::RDS::DBSubnetGroup
     Properties:
       DBSubnetGroupDescription: CloudFormation managed DB subnet group.
-      SubnetIds: subnet-0ce624ed4acaa5978, subnet-04eeaa092757f2cd5
+      SubnetIds: !Ref Subnets
 
   DatabaseCluster:
     Type: AWS::RDS::DBCluster
