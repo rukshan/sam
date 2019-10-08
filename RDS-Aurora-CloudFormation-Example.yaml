@@ -21,15 +21,14 @@ Parameters:
     Type: String
 
 Mappings:
-  '000000000000':
-    us-east-1:
+  '538804526516538804526516':
+    ap-southeast-1:
       Subnets:
-        - subnet-00000000
-        - subnet-11111111
-        - subnet-22222222
+        - subnet-0ce624ed4acaa5978
+        - subnet-0ce624ed4acaa5978        
       SecurityGroups:
-        - sg-00000000
-      InstanceType: db.r4.large
+        - aurora-db-security-group
+      InstanceType: db.t2.medium
       BackupRetentionPeriod: 7
 
 Metadata:
@@ -38,8 +37,8 @@ Metadata:
       - Label:
           default: Database Configuration
         Parameters:
-          - DatabaseUsername
-          - DatabasePassword
+          - root
+          - Persistent2019
     ParameterLabels:
       DatabaseUsername:
         default: Database Username
@@ -78,64 +77,6 @@ Resources:
       DBInstanceClass: !FindInMap [!Ref "AWS::AccountId", !Ref "AWS::Region", "InstanceType"]
       DBSubnetGroupName: !Ref "DatabaseSubnetGroup"
 
-  DatabasePrimaryCPUAlarm:
-    Type: AWS::CloudWatch::Alarm
-    Properties:
-      AlarmDescription: Primary database CPU utilization is over 80%.
-      Namespace: AWS/RDS
-      MetricName: CPUUtilization
-      Unit: Percent
-      Statistic: Average
-      Period: 300
-      EvaluationPeriods: 2
-      Threshold: 80
-      ComparisonOperator: GreaterThanOrEqualToThreshold
-      Dimensions:
-        - Name: DBInstanceIdentifier
-          Value: !Ref "DatabasePrimaryInstance"
-      AlarmActions:
-        - Ref: StackAlarmTopic
-      InsufficientDataActions:
-        - Ref: StackAlarmTopic
-
-  DatabasePrimaryMemoryAlarm:
-    Type: AWS::CloudWatch::Alarm
-    Properties:
-      AlarmDescription: Primary database freeable memory is under 700MB.
-      Namespace: AWS/RDS
-      MetricName: FreeableMemory
-      Unit: Bytes
-      Statistic: Average
-      Period: 300
-      EvaluationPeriods: 2
-      Threshold: 700000000
-      ComparisonOperator: LessThanOrEqualToThreshold
-      Dimensions:
-        - Name: DBInstanceIdentifier
-          Value: !Ref "DatabasePrimaryInstance"
-      AlarmActions:
-        - Ref: StackAlarmTopic
-      InsufficientDataActions:
-        - Ref: StackAlarmTopic
-
-  DatabasePrimaryReplicationAlarm:
-    Type: AWS::CloudWatch::Alarm
-    Properties:
-      AlarmDescription: Database replication latency is over 200ms.
-      Namespace: AWS/RDS
-      MetricName: AuroraReplicaLag
-      Unit: Milliseconds
-      Statistic: Average
-      Period: 300
-      EvaluationPeriods: 2
-      Threshold: 200
-      ComparisonOperator: GreaterThanOrEqualToThreshold
-      Dimensions:
-        - Name: DBInstanceIdentifier
-          Value: !Ref "DatabaseReplicaInstance"
-      AlarmActions:
-        - Ref: StackAlarmTopic
-
   DatabaseReplicaInstance:
     Type: AWS::RDS::DBInstance
     Properties:
@@ -144,63 +85,11 @@ Resources:
       DBInstanceClass: !FindInMap [!Ref "AWS::AccountId", !Ref "AWS::Region", "InstanceType"]
       DBSubnetGroupName: !Ref "DatabaseSubnetGroup"
 
-  DatabaseReplicaCPUAlarm:
-    Type: AWS::CloudWatch::Alarm
-    Properties:
-      AlarmDescription: Replica database CPU utilization is over 80%.
-      Namespace: AWS/RDS
-      MetricName: CPUUtilization
-      Unit: Percent
-      Statistic: Average
-      Period: 300
-      EvaluationPeriods: 2
-      Threshold: 80
-      ComparisonOperator: GreaterThanOrEqualToThreshold
-      Dimensions:
-        - Name: DBInstanceIdentifier
-          Value: !Ref "DatabaseReplicaInstance"
-      AlarmActions:
-        - Ref: StackAlarmTopic
-      InsufficientDataActions:
-        - Ref: StackAlarmTopic
+  
 
-  DatabaseReplicaMemoryAlarm:
-    Type: AWS::CloudWatch::Alarm
-    Properties:
-      AlarmDescription: Replica database freeable memory is under 700MB.
-      Namespace: AWS/RDS
-      MetricName: FreeableMemory
-      Unit: Bytes
-      Statistic: Average
-      Period: 300
-      EvaluationPeriods: 2
-      Threshold: 700000000
-      ComparisonOperator: LessThanOrEqualToThreshold
-      Dimensions:
-        - Name: DBInstanceIdentifier
-          Value: !Ref "DatabaseReplicaInstance"
-      AlarmActions:
-        - Ref: StackAlarmTopic
-      InsufficientDataActions:
-        - Ref: StackAlarmTopic
+  
 
-  DatabaseReplicaReplicationAlarm:
-    Type: AWS::CloudWatch::Alarm
-    Properties:
-      AlarmDescription: Database replication latency is over 200ms.
-      Namespace: AWS/RDS
-      MetricName: AuroraReplicaLag
-      Unit: Milliseconds
-      Statistic: Average
-      Period: 300
-      EvaluationPeriods: 2
-      Threshold: 200
-      ComparisonOperator: GreaterThanOrEqualToThreshold
-      Dimensions:
-        - Name: DBInstanceIdentifier
-          Value: !Ref "DatabaseReplicaInstance"
-      AlarmActions:
-        - Ref: StackAlarmTopic
+  
 
   
 
