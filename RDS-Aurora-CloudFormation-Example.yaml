@@ -3,7 +3,6 @@ AWSTemplateFormatVersion: 2010-09-09
 
 Description: >
   A basic CloudFormation template for an RDS Aurora cluster.
-
 Parameters:
   DatabaseUsername:
     AllowedPattern: "root"
@@ -46,7 +45,13 @@ Metadata:
       DatabasePassword:
         default: Database Password
 
-DatabaseSubnetGroup:
+Resources:
+  StackAlarmTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      DisplayName: Aurora-test-SNS
+
+  DatabaseSubnetGroup:
     Type: AWS::RDS::DBSubnetGroup
     Properties:
       DBSubnetGroupDescription: CloudFormation managed DB subnet group.
@@ -71,10 +76,17 @@ DatabaseSubnetGroup:
       DBClusterIdentifier: !Ref "DatabaseCluster"
       DBInstanceClass: !FindInMap [!Ref "AWS::AccountId", !Ref "AWS::Region", "InstanceType"]
       DBSubnetGroupName: !Ref "DatabaseSubnetGroup"
+
   DatabaseReplicaInstance:
     Type: AWS::RDS::DBInstance
     Properties:
       Engine: aurora
       DBClusterIdentifier: !Ref "DatabaseCluster"
       DBInstanceClass: !FindInMap [!Ref "AWS::AccountId", !Ref "AWS::Region", "InstanceType"]
-      DBSubnetGroupName: !Ref "DatabaseSubnetGroup" 
+      DBSubnetGroupName: !Ref "DatabaseSubnetGroup"
+
+  
+
+  
+
+  
