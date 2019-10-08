@@ -19,20 +19,6 @@ Parameters:
     MinLength: '8'
     NoEcho: 'true'
     Type: String
-  PrimayInstance: 
-    AllowedPattern: "[a-zA-Z0-9]+"
-    ConstraintDescription: must be between 4 to 30 alphanumeric characters.
-    Description: The database admin account user name, between 1 to 16 alphanumeric characters.
-    MaxLength: '30'
-    MinLength: '4'
-    Type: String
-  SecondaryInstance: 
-    AllowedPattern: "[a-zA-Z0-9]+"
-    ConstraintDescription: must be between 4 to 30 alphanumeric characters.
-    Description: The database admin account user name, between 1 to 16 alphanumeric characters.
-    MaxLength: '30'
-    MinLength: '4'
-    Type: String  
 
 Mappings:
   '538804526516':
@@ -58,11 +44,7 @@ Metadata:
         default: Database Username
       DatabasePassword:
         default: Database Password
-      PrimayInstance:
-        default: Primary DB Instance Name
-      SecondaryInstance:
-        default: Secondary DB Instance Name
-
+        
 Resources:
   StackAlarmTopic:
     Type: AWS::SNS::Topic
@@ -91,7 +73,7 @@ Resources:
     Type: AWS::RDS::DBInstance
     Properties:
       Engine: aurora
-      DBClusterIdentifier: !Ref "PrimayInstance"
+      DBClusterIdentifier: !Ref "DatabaseCluster"
       DBInstanceClass: !FindInMap [!Ref "AWS::AccountId", !Ref "AWS::Region", "InstanceType"]
       DBSubnetGroupName: !Ref "DatabaseSubnetGroup"
 
@@ -99,7 +81,7 @@ Resources:
     Type: AWS::RDS::DBInstance
     Properties:
       Engine: aurora
-      DBClusterIdentifier: !Ref "SecondaryInstance"
+      DBClusterIdentifier: !Ref "DatabaseCluster"
       DBInstanceClass: !FindInMap [!Ref "AWS::AccountId", !Ref "AWS::Region", "InstanceType"]
       DBSubnetGroupName: !Ref "DatabaseSubnetGroup"
 
