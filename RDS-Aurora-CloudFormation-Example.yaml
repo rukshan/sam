@@ -57,9 +57,13 @@ Metadata:
       DatabasePassword:
         default: Database Password
       Subnets:
-        default: subnet-0ce624ed4acaa5978,subnet-04eeaa092757f2cd5
+        default: DB Private Sub Nets
         
 Resources:
+  DBIBAuroraDBSecurityGroup:
+    Type: "AWS::EC2::SecurityGroup::Id"
+    Description: The security group of the cluster control plane. 
+  
   DatabaseSubnetGroup:
     Type: AWS::RDS::DBSubnetGroup
     Properties:
@@ -78,7 +82,7 @@ Resources:
       PreferredBackupWindow: 01:00-02:00
       PreferredMaintenanceWindow: mon:03:00-mon:04:00
       DBSubnetGroupName: !Ref "DatabaseSubnetGroup"
-      VpcSecurityGroupIds: sg-0cb2aaa84d1d1ff71
+      VpcSecurityGroupIds: !Ref ClusterControlPlaneSecurityGroup
       Tags:
         - Key: Name
         - Value: AuroraDB 
