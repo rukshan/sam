@@ -73,7 +73,7 @@ Resources:
     Type: AWS::RDS::DBInstance
     Properties:
       Engine: aurora
-      DBClusterIdentifier: !Ref "DatabaseCluster"
+      DBClusterIdentifier: dbib-cuib-aurora-1
       DBInstanceClass: !FindInMap [!Ref "AWS::AccountId", !Ref "AWS::Region", "InstanceType"]
       DBSubnetGroupName: !Ref "DatabaseSubnetGroup"
 
@@ -81,7 +81,7 @@ Resources:
     Type: AWS::RDS::DBInstance
     Properties:
       Engine: aurora
-      DBClusterIdentifier: !Ref "DatabaseCluster"
+      DBClusterIdentifier: dbib-cuib-aurora-2
       DBInstanceClass: !FindInMap [!Ref "AWS::AccountId", !Ref "AWS::Region", "InstanceType"]
       DBSubnetGroupName: !Ref "DatabaseSubnetGroup"
 
