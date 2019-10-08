@@ -60,11 +60,13 @@ Metadata:
         default: DB Private Sub Nets
         
 Resources:
-  DBIBAuroraDBSecurityGroup:
+   DBIBAuroraDBSecurityGroup:
     Type: AWS::RDS::DBSecurityGroup
     Properties: 
     DBSecurityGroupIngress: 
-    - CIDRIP:0.0.0.0/0
+      Type: AWS::RDS::DBSecurityGroupIngress
+    Properties: 
+      CIDRIP: 0.0.0.0/0    
     GroupDescription: Aurora DB SG for DBIB
     Tags: 
     - Key: Name 
