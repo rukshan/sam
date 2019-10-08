@@ -54,7 +54,6 @@ Metadata:
         default: Database Username
       DatabasePassword:
         default: Database Password
-      
         
 Resources:
   StackAlarmTopic:
