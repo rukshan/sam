@@ -55,11 +55,6 @@ Metadata:
         default: Database Password
         
 Resources:
-  StackAlarmTopic:
-    Type: AWS::SNS::Topic
-    Properties:
-      DisplayName: Stack Alarm Topic
-
   DatabaseSubnetGroup:
     Type: AWS::RDS::DBSubnetGroup
     Properties:
