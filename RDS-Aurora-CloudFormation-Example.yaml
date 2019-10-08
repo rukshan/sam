@@ -25,17 +25,18 @@ Parameters:
     MaxLength: '30'
     MinLength: '4'
     Type: String
+  PrivateSubnet:  
 
-Mappings:
-  '538804526516':
-    ap-southeast-1:
-      Subnets:
-        - subnet-0ce624ed4acaa5978
-        - subnet-04eeaa092757f2cd5        
-      SecurityGroups:
-        - sg-0cb2aaa84d1d1ff71
-      InstanceType: db.t2.medium
-      BackupRetentionPeriod: 7
+#Mappings:
+#  '538804526516':
+#    ap-southeast-1:
+#      Subnets:
+#        - subnet-0ce624ed4acaa5978
+#        - subnet-04eeaa092757f2cd5        
+#      SecurityGroups:
+#        - sg-0cb2aaa84d1d1ff71
+#      InstanceType: db.t2.medium
+#      BackupRetentionPeriod: 7
 
 Metadata:
   AWS::CloudFormation::Interface:
@@ -59,7 +60,7 @@ Resources:
     Type: AWS::RDS::DBSubnetGroup
     Properties:
       DBSubnetGroupDescription: CloudFormation managed DB subnet group.
-      SubnetIds: !FindInMap [!Ref "AWS::AccountId", !Ref "AWS::Region", "Subnets"]
+      SubnetIds: subnet-0ce624ed4acaa5978, subnet-04eeaa092757f2cd5
 
   DatabaseCluster:
     Type: AWS::RDS::DBCluster
@@ -69,11 +70,11 @@ Resources:
       MasterUsername: !Ref "DatabaseUsername"
       MasterUserPassword: !Ref "DatabasePassword"
       StorageEncrypted: true
-      BackupRetentionPeriod: !FindInMap [!Ref "AWS::AccountId", !Ref "AWS::Region", "BackupRetentionPeriod"]
+      BackupRetentionPeriod: 7
       PreferredBackupWindow: 01:00-02:00
       PreferredMaintenanceWindow: mon:03:00-mon:04:00
       DBSubnetGroupName: !Ref "DatabaseSubnetGroup"
-      VpcSecurityGroupIds: !FindInMap [!Ref "AWS::AccountId", !Ref "AWS::Region", "SecurityGroups"]
+      VpcSecurityGroupIds: sg-0cb2aaa84d1d1ff71
       Tags:
         - Key: Name
         - Value: AuroraDB 
@@ -85,7 +86,7 @@ Resources:
     Properties:
       Engine: aurora
       DBClusterIdentifier: !Ref "DatabaseCluster"
-      DBInstanceClass: !FindInMap [!Ref "AWS::AccountId", !Ref "AWS::Region", "InstanceType"]
+      DBInstanceClass: db.t2.medium
       DBSubnetGroupName: !Ref "DatabaseSubnetGroup"
 
   DatabaseReplicaInstance:
@@ -93,6 +94,6 @@ Resources:
     Properties:
       Engine: aurora
       DBClusterIdentifier: !Ref "DatabaseCluster"
-      DBInstanceClass: !FindInMap [!Ref "AWS::AccountId", !Ref "AWS::Region", "InstanceType"]
+      DBInstanceClass: db.t2.medium
       DBSubnetGroupName: !Ref "DatabaseSubnetGroup"
   
