@@ -19,46 +19,58 @@ Parameters:
     MinLength: '8'
     NoEcho: 'true'
     Type: String
+  DatabaseName:
+    AllowedPattern: "[a-zA-Z0-9-_]+"
+    ConstraintDescription: must be between 4 to 30 alphanumeric characters.
+    Description: The database admin account user name, between 4 to 30 alphanumeric characters.
+    MaxLength: '30'
+    MinLength: '4'
+    Type: String
+  Subnets:
+    Type: "List<AWS::EC2::Subnet::Id>"   
 
 Mappings:
   '538804526516':
     ap-southeast-1:
-      Subnets:
-        - subnet-0ce624ed4acaa5978
-        - subnet-04eeaa092757f2cd5
       SecurityGroups:
         - sg-060a1b7db4f3a1717
       InstanceType: db.t2.small
-      BackupRetentionPeriod: 7
-
+      
 Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
       - Label:
           default: Database Configuration
         Parameters:
+          - DatabaseName
           - DatabaseUsername
           - DatabasePassword
+          - Subnets
     ParameterLabels:
+      DatabaseName:
+        default: Database Name
       DatabaseUsername:
         default: Database Username
       DatabasePassword:
         default: Database Password
+      Subnets:
+        default: DB Private Sub Nets  
 
 Resources:
   DatabaseSubnetGroup:
     Type: AWS::RDS::DBSubnetGroup
     Properties:
       DBSubnetGroupDescription: CloudFormation managed DB subnet group.
-      SubnetIds: !FindInMap [!Ref "AWS::AccountId", !Ref "AWS::Region", "Subnets"]
+      SubnetIds: !Ref Subnets
 
   DatabaseCluster:
     Type: AWS::RDS::DBCluster
     Properties:
       Engine: aurora
+      DatabaseName: !Ref "DatabaseName"
       MasterUsername: !Ref "DatabaseUsername"
       MasterUserPassword: !Ref "DatabasePassword"
-      BackupRetentionPeriod: !FindInMap [!Ref "AWS::AccountId", !Ref "AWS::Region", "BackupRetentionPeriod"]
+      BackupRetentionPeriod: 7
       PreferredBackupWindow: 01:00-02:00
       PreferredMaintenanceWindow: mon:03:00-mon:04:00
       DBSubnetGroupName: !Ref "DatabaseSubnetGroup"
