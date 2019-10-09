@@ -36,7 +36,7 @@ Parameters:
     Type: String
     Description: Tenant Name  
   DBSecurityGroup:  
-    Type: String
+    Type: List<AWS::EC2::SecurityGroup::Id>
     Description: Security Group Name
   
 Metadata:
