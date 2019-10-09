@@ -92,6 +92,10 @@ Resources:
       DBClusterIdentifier: !Ref "DatabaseCluster"
       DBInstanceClass: !Ref "InstanceType"
       DBSubnetGroupName: !Ref "DatabaseSubnetGroup"
+      Tags: 
+         - 
+            Key: "Name"
+            Value: !Ref "DBClusterIdentifier"
   
   DatabaseReplicaInstance:
     Type: AWS::RDS::DBInstance
@@ -100,3 +104,7 @@ Resources:
       DBClusterIdentifier: !Ref "DatabaseCluster"
       DBInstanceClass: !Ref "InstanceType"
       DBSubnetGroupName: !Ref "DatabaseSubnetGroup"
+      Tags: 
+         - 
+            Key: "Name"
+            Value: !Ref "DBClusterIdentifier"
