@@ -31,7 +31,10 @@ Parameters:
   InstanceType: 
     Type: String
     Default: db.t2.small
-    Description: Enter db Instance types.  
+    Description: Enter db Instance types.
+  DBClusterIdentifier: 
+    Type: String
+    Description: Tenant Name  
   
 Metadata:
   AWS::CloudFormation::Interface:
@@ -54,6 +57,8 @@ Metadata:
         default: DB Private Sub Nets
       InstanceType:
         default: DB Instance Type
+      DBClusterIdentifier:
+        default: DB Cluster Name
 
 Resources:
   DatabaseSubnetGroup:
@@ -73,6 +78,10 @@ Resources:
       PreferredBackupWindow: 01:00-02:00
       PreferredMaintenanceWindow: mon:03:00-mon:04:00
       DBSubnetGroupName: !Ref "DatabaseSubnetGroup"
+      DBClusterIdentifier: !Ref "DBClusterIdentifier"
+      Tags:
+        - Key: Name
+        - Value: !Ref "DBClusterIdentifier"
       
   DatabasePrimaryInstance:
     Type: AWS::RDS::DBInstance
