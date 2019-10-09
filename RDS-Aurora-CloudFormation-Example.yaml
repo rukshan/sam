@@ -27,7 +27,11 @@ Parameters:
     MinLength: '4'
     Type: String
   Subnets:
-    Type: "List<AWS::EC2::Subnet::Id>"   
+    Type: "List<AWS::EC2::Subnet::Id>"  
+  InstanceType: 
+    Type: String
+    Default: db.t2.small
+    Description: Enter db Instance types.  
 
 Mappings:
   '538804526516':
@@ -52,7 +56,9 @@ Metadata:
       DatabasePassword:
         default: Database Password
       Subnets:
-        default: DB Private Sub Nets  
+        default: DB Private Sub Nets
+      InstanceType:
+        default: DB Instance Type
 
 Resources:
   DatabaseSubnetGroup:
@@ -79,7 +85,7 @@ Resources:
     Properties:
       Engine: aurora
       DBClusterIdentifier: !Ref "DatabaseCluster"
-      DBInstanceClass: !FindInMap [!Ref "AWS::AccountId", !Ref "AWS::Region", "InstanceType"]
+      DBInstanceClass: !Ref "InstanceType"
       DBSubnetGroupName: !Ref "DatabaseSubnetGroup"
   
   DatabaseReplicaInstance:
@@ -87,5 +93,5 @@ Resources:
     Properties:
       Engine: aurora
       DBClusterIdentifier: !Ref "DatabaseCluster"
-      DBInstanceClass: !FindInMap [!Ref "AWS::AccountId", !Ref "AWS::Region", "InstanceType"]
+      DBInstanceClass: !Ref "InstanceType"
       DBSubnetGroupName: !Ref "DatabaseSubnetGroup"
