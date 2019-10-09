@@ -62,14 +62,14 @@ Metadata:
 
 Resources:
   DBSecurityGroup: 
-  Type: AWS::RDS::DBSecurityGroup
-  Properties:
-    GroupDescription: "Node group Acccess allowed towards DB"
-    EC2VpcId: "vpc-01740fe18662c1c07"
-    DBSecurityGroupIngress: 
-      - 
-        EC2SecurityGroupName: "sg-fb6f4987"
-        CIDRIP: 0.0.0.0/0
+    Type: AWS::RDS::DBSecurityGroup
+    Properties:
+      GroupDescription: "Node group Acccess allowed towards DB"
+      EC2VpcId: "vpc-01740fe18662c1c07"
+      DBSecurityGroupIngress: 
+        - 
+          EC2SecurityGroupName: "sg-fb6f4987"
+          CIDRIP: 0.0.0.0/0
   
   DatabaseSubnetGroup:
     Type: AWS::RDS::DBSubnetGroup
