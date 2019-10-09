@@ -35,6 +35,9 @@ Parameters:
   DBClusterIdentifier: 
     Type: String
     Description: Tenant Name  
+  DBSecurityGroup:  
+    Type: String
+    Description: Security Group Name
   
 Metadata:
   AWS::CloudFormation::Interface:
@@ -59,19 +62,10 @@ Metadata:
         default: DB Instance Type
       DBClusterIdentifier:
         default: DB Cluster Name
-
+      DBSecurityGroup:  
+        default: DB Security Group Name
+        
 Resources:
-  DBSecurityGroup: 
-    Type: AWS::RDS::DBSecurityGroup
-    Properties:
-      GroupDescription: "Node group Acccess allowed towards DB"
-      EC2VpcId: "vpc-01740fe18662c1c07"
-      DBSecurityGroupIngress: 
-        - 
-          EC2SecurityGroupName: DB Security
-          EC2SecurityGroupId: "sg-fb6f4987"
-          CIDRIP: 0.0.0.0/0
-  
   DatabaseSubnetGroup:
     Type: AWS::RDS::DBSubnetGroup
     Properties:
