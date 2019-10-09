@@ -73,18 +73,18 @@ Resources:
       Engine: aurora
       MasterUsername: !Ref "DatabaseUsername"
       MasterUserPassword: !Ref "DatabasePassword"
-      BackupRetentionPeriod: !FindInMap [!Ref "AWS::AccountId", !Ref "AWS::Region", "BackupRetentionPeriod"]
+      BackupRetentionPeriod: 7
       PreferredBackupWindow: 01:00-02:00
       PreferredMaintenanceWindow: mon:03:00-mon:04:00
       DBSubnetGroupName: !Ref "DatabaseSubnetGroup"
-      VpcSecurityGroupIds: !FindInMap [!Ref "AWS::AccountId", !Ref "AWS::Region", "SecurityGroups"]
+      VpcSecurityGroupIds: sg-060a1b7db4f3a1717
 
   DatabasePrimaryInstance:
     Type: AWS::RDS::DBInstance
     Properties:
       Engine: aurora
       DBClusterIdentifier: !Ref "DatabaseCluster"
-      DBInstanceClass: !FindInMap [!Ref "AWS::AccountId", !Ref "AWS::Region", "InstanceType"]
+      DBInstanceClass: db.t2.small
       DBSubnetGroupName: !Ref "DatabaseSubnetGroup"
 
   DatabaseReplicaInstance:
@@ -92,5 +92,5 @@ Resources:
     Properties:
       Engine: aurora
       DBClusterIdentifier: !Ref "DatabaseCluster"
-      DBInstanceClass: !FindInMap [!Ref "AWS::AccountId", !Ref "AWS::Region", "InstanceType"]
+      DBInstanceClass: db.t2.small
       DBSubnetGroupName: !Ref "DatabaseSubnetGroup"
