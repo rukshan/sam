@@ -90,6 +90,32 @@ Resources:
          - 
             Key: "Name"
             Value: !Ref "DBClusterIdentifier"
+  
+  AutoScalerTarget:
+    Type: AWS::ApplicationAutoScaling::ScalableTarget
+    Properties:
+      MinCapacity: 1
+      MaxCapacity: 8
+      ResourceId: !Sub "cluster:${DatabaseCluster}"
+      ScalableDimension: rds:cluster:ReadReplicaCount
+      ServiceNamespace: rds
+      RoleARN: !Sub "arn:aws:iam::${AWS::AccountId}:role/aws-service-role/rds.application-autoscaling.amazonaws.com/AWSServiceRoleForApplicationAutoScaling_RDSCluster"
+
+  AutoScaler:
+    Type: AWS::ApplicationAutoScaling::ScalingPolicy
+    Properties:
+      ScalingTargetId: !Ref "AutoScalerTarget"
+      ServiceNamespace: rds
+      PolicyName: dbib
+      PolicyType: TargetTrackingScaling
+      ScalableDimension: rds:cluster:ReadReplicaCount
+      TargetTrackingScalingPolicyConfiguration:
+        PredefinedMetricSpecification:
+          PredefinedMetricType: RDSReaderAverageCPUUtilization
+        TargetValue: 80.0
+        ScaleOutCooldown: 300
+        ScaleInCooldown: 300
+        DisableScaleIn: False
             
   DatabasePrimaryInstance:
     Type: AWS::RDS::DBInstance
