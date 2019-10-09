@@ -62,12 +62,11 @@ Metadata:
 Resources:
    DBIBAuroraDBSecurityGroup:
     Type: AWS::RDS::DBSecurityGroup
-    Properties: 
-    DBSecurityGroupIngress: 
-      Type: AWS::RDS::DBSecurityGroupIngress
-    Properties: 
-      CIDRIP: 0.0.0.0/0    
-    GroupDescription: Aurora DB SG for DBIB
+    Properties:
+    DBSecurityGroupIngress:
+      EC2SecurityGroupName:
+        Ref: sg-060a1b7db4f3a1717
+    GroupDescription: Node group access to DB
     Tags: 
     - Key: Name 
     - Value: DBIB DB Security group
