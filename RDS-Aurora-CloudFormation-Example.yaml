@@ -12,32 +12,24 @@ Parameters:
     MinLength: '1'
     Type: String
   DatabasePassword:
+    AllowedPattern: "[a-zA-Z0-9]+"
     ConstraintDescription: must be between 8 to 41 alphanumeric characters.
     Description: The database admin account password, between 8 to 41 alphanumeric characters.
     MaxLength: '41'
     MinLength: '8'
     NoEcho: 'true'
     Type: String
-  DatabaseName:
-    AllowedPattern: "[a-zA-Z0-9-_]+"
-    ConstraintDescription: must be between 4 to 30 alphanumeric characters.
-    Description: The database admin account user name, between 4 to 30 alphanumeric characters.
-    MaxLength: '30'
-    MinLength: '4'
-    Type: String
-  Subnets:
-    Type: "List<AWS::EC2::Subnet::Id>"  
 
-#Mappings:
-#  '538804526516':
-#    ap-southeast-1:
-#      Subnets:
-#        - subnet-0ce624ed4acaa5978
-#        - subnet-04eeaa092757f2cd5        
-#      SecurityGroups:
-#        - sg-0cb2aaa84d1d1ff71
-#      InstanceType: db.t2.medium
-#      BackupRetentionPeriod: 7
+Mappings:
+  '538804526516':
+    ap-southeast-1:
+      Subnets:
+        - subnet-0ce624ed4acaa5978
+        - subnet-04eeaa092757f2cd5
+      SecurityGroups:
+        - sg-060a1b7db4f3a1717
+      InstanceType: db.t2.small
+      BackupRetentionPeriod: 7
 
 Metadata:
   AWS::CloudFormation::Interface:
@@ -45,70 +37,45 @@ Metadata:
       - Label:
           default: Database Configuration
         Parameters:
-          - DatabaseName
           - DatabaseUsername
           - DatabasePassword
-          - Subnets
     ParameterLabels:
-      DatabaseName:
-        default: Database Name
       DatabaseUsername:
         default: Database Username
       DatabasePassword:
         default: Database Password
-      Subnets:
-        default: DB Private Sub Nets
-        
+
 Resources:
-   DBIBAuroraDBSecurityGroup:
-    Type: AWS::RDS::DBSecurityGroup
-    Properties:
-    DBSecurityGroupIngress:
-      EC2SecurityGroupName:
-        Ref: sg-060a1b7db4f3a1717
-    GroupDescription: Node group access to DB
-    Tags: 
-    - Key: Name 
-    - Value: DBIB DB Security group
-    
   DatabaseSubnetGroup:
     Type: AWS::RDS::DBSubnetGroup
     Properties:
       DBSubnetGroupDescription: CloudFormation managed DB subnet group.
-      SubnetIds: !Ref Subnets
+      SubnetIds: !FindInMap [!Ref "AWS::AccountId", !Ref "AWS::Region", "Subnets"]
 
   DatabaseCluster:
     Type: AWS::RDS::DBCluster
     Properties:
       Engine: aurora
-      DatabaseName: !Ref "DatabaseName"
       MasterUsername: !Ref "DatabaseUsername"
       MasterUserPassword: !Ref "DatabasePassword"
-      StorageEncrypted: true
-      BackupRetentionPeriod: 7
+      BackupRetentionPeriod: !FindInMap [!Ref "AWS::AccountId", !Ref "AWS::Region", "BackupRetentionPeriod"]
       PreferredBackupWindow: 01:00-02:00
       PreferredMaintenanceWindow: mon:03:00-mon:04:00
       DBSubnetGroupName: !Ref "DatabaseSubnetGroup"
-      VpcSecurityGroupIds: !Ref DBIBAuroraDBSecurityGroup
-      Tags:
-        - Key: Name
-        - Value: AuroraDB 
-        - Key: Env
-        - Value: STG
+      VpcSecurityGroupIds: !FindInMap [!Ref "AWS::AccountId", !Ref "AWS::Region", "SecurityGroups"]
 
   DatabasePrimaryInstance:
     Type: AWS::RDS::DBInstance
     Properties:
       Engine: aurora
       DBClusterIdentifier: !Ref "DatabaseCluster"
-      DBInstanceClass: db.t2.medium
+      DBInstanceClass: !FindInMap [!Ref "AWS::AccountId", !Ref "AWS::Region", "InstanceType"]
       DBSubnetGroupName: !Ref "DatabaseSubnetGroup"
-
+  
   DatabaseReplicaInstance:
     Type: AWS::RDS::DBInstance
     Properties:
       Engine: aurora
       DBClusterIdentifier: !Ref "DatabaseCluster"
-      DBInstanceClass: db.t2.medium
+      DBInstanceClass: !FindInMap [!Ref "AWS::AccountId", !Ref "AWS::Region", "InstanceType"]
       DBSubnetGroupName: !Ref "DatabaseSubnetGroup"
-  
