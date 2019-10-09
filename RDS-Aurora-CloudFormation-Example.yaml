@@ -68,7 +68,8 @@ Resources:
     EC2VpcId: "vpc-01740fe18662c1c07"
     DBSecurityGroupIngress: 
       - 
-        EC2SecurityGroupName: "sg-fb6f4987"    
+        EC2SecurityGroupName: "sg-fb6f4987"
+        CIDRIP: 0.0.0.0/0
   
   DatabaseSubnetGroup:
     Type: AWS::RDS::DBSubnetGroup
